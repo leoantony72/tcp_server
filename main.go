@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 	//"os"
@@ -31,8 +32,8 @@ func server(outgoing chan Message) {
 				if c == msg.Conn {
 					continue
 				}
-				//content := fmt.Sprintf("[%s]:%s",msg.Conn.RemoteAddr().String(),msg.Message)
-				_, err := c.Write([]byte(msg.Message))
+				content := fmt.Sprintf("[%s]:%s", msg.Conn.RemoteAddr().String(), msg.Message)
+				_, err := c.Write([]byte(content))
 				if err != nil {
 					log.Printf("coudnot write message to %s", c.RemoteAddr().String())
 				}
@@ -97,7 +98,7 @@ func handleConnection(conn net.Conn, outgoing chan Message) {
 			Message: string(buffer[0:n]),
 		}
 
-		log.Printf("msg: %s",msg.Message)
+		log.Printf("msg: %s", msg.Message)
 
 		outgoing <- msg
 
